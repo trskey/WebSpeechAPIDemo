@@ -4,7 +4,7 @@ Web Speech API Speech Recognition Demo
 # Dependency
 html,css,javascript
 
-#Browser support
+# Browser support
 Chrome(latest)
 
 # References
