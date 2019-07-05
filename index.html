@@ -1,0 +1,92 @@
+<!-- index_voice.html -->
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<title>Speech Recognition demo</title>
+
+	<link href="https://fonts.googleapis.com/css?family=Playfair+Display:400,700" rel="stylesheet">
+	<!-- Bootstrap CSS -->
+	<link href="css/bootstrap.min.css" rel="stylesheet">
+	<link href="css/style.css" rel="stylesheet">
+
+</head>
+<body>
+	<header class="sticky-top">
+		<div>
+		</div>
+	</header>
+	<main>
+		<div class="jumbotron jumbotron-extend">
+			<div class="container-fluid　jumbotron-container">
+				<h1 class="site-name">音声認識デモ</h1>
+				<h3 class="site-sub-name">Speech Recognition demo</h3>
+				<div class="row">
+					<div class="col-sm col-md-2">
+						<button id="start-btn" class="btn-circle-3d" >start</button>
+					</div>
+					<div class="col-sm col-md-10">
+						<button id="stop-btn" class="btn-circle-3d" >stop</button>
+					</div>
+				</div> 
+				<p></p>
+				<div class="row">
+					<div class="col-sm col-md-12">
+						<div class="result-area" id="result-div"></div>
+					</div> 
+				</div>
+			</div>
+		</div>
+	</main>
+	<footer class="fixed-bottom">
+		<div class="container-fluid bg-dark">
+			<span class="text-light">Speech Recognition demo</span>
+		</div>
+	</footer>
+
+	<script>
+		const startBtn = document.querySelector('#start-btn');
+		const stopBtn = document.querySelector('#stop-btn');
+		const resultDiv = document.querySelector('#result-div');
+	  
+		SpeechRecognition = webkitSpeechRecognition || SpeechRecognition;
+		let recognition = new SpeechRecognition();
+	  
+		recognition.lang = 'ja-JP';
+		recognition.interimResults = true;
+		recognition.continuous = true;
+	  
+		let finalTranscript = ''; // 確定した(黒の)認識結果
+	  
+		recognition.onresult = (event) => {
+		  let interimTranscript = ''; // 暫定(灰色)の認識結果
+		  for (let i = event.resultIndex; i < event.results.length; i++) {
+			let transcript = event.results[i][0].transcript;
+			if (event.results[i].isFinal) {
+				// 確定したあとで改行
+				finalTranscript += transcript + "<br>";
+			} else {
+				interimTranscript = transcript;
+			}
+		  }
+		  resultDiv.innerHTML = finalTranscript + '<i style="color:#ddd;">' + interimTranscript + '</i>';
+		}
+	  
+		startBtn.onclick = () => {
+		  	recognition.start();
+		  	resultDiv.innerHTML = "start";
+		}
+		stopBtn.onclick = () => {
+		  	recognition.stop();
+		  	resultDiv.innerHTML += "<br>" + "stop";
+		}
+	</script>
+	<!-- 利用しない
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+	-->
+	<script src="js/bootstrap.min.js"></script>
+</body>
+</html>
